@@ -1,8 +1,10 @@
 {
   "name": "optional2js",
-  "version": "1.0.0",
-  "description": "",
-  "main": "dist/index.js",
+  "version": "1.0.2",
+  "description": "为js提供的类似Java实现的Optional库",
+  "main": "dist/index.cjs.js",
+  "module": "dist/index.esm.js",
+  "umd:main": "dist/index.umd.js",
   "types": "dist/index.d.ts",
   "repository": {
     "type": "git",
@@ -14,27 +16,35 @@
   "scripts": {
     "test": "jest",
     "eslint": "./node_modules/.bin/eslint --fix src/**/*.ts",
-    "build": "webpack --config webpack.config.js"
+    "build": "rollup --config rollup.config.js --bundleConfigAsCjs",
+    "publish": "npm run build && npm publish"
   },
+  "keywords": [
+    "optional",
+    "javascript",
+    "typescript",
+    "optional-js",
+    "optional-ts",
+    "utils"
+  ],
   "author": "",
   "license": "ISC",
   "devDependencies": {
     "@commitlint/cli": "^9.1.2",
     "@commitlint/config-conventional": "^9.1.1",
+    "@rollup/plugin-terser": "^0.4.4",
     "@types/jest": "^25.2.3",
     "@typescript-eslint/eslint-plugin": "^3.0.0",
     "@typescript-eslint/parser": "^3.0.0",
-    "clean-webpack-plugin": "^3.0.0",
     "eslint": "^7.1.0",
     "husky": "^4.2.5",
     "jest": "^26.0.1",
     "lint-staged": "^10.2.11",
     "prettier": "^2.0.5",
+    "rollup": "^4.14.1",
+    "rollup-plugin-typescript2": "^0.36.0",
     "ts-jest": "^26.0.0",
-    "ts-loader": "^8.0.12",
-    "typescript": "^3.9.3",
-    "webpack": "^5.10.3",
-    "webpack-cli": "^4.2.0"
+    "typescript": "^3.9.3"
   },
   "husky": {
     "hooks": {
