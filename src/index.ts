@@ -2,7 +2,7 @@
  * Optional类
  */
 class Optional<T> {
-  private constructor(private value: T | null | undefined) {}
+  private constructor(private value: OptionalValue<T>) {}
 
   /**
    * 创建一个包含非空值的Optional对象
@@ -18,8 +18,8 @@ class Optional<T> {
   /**
    * 创建一个不包含值的Optional对象
    */
-  public static empty<T>(): Optional<T> {
-    return new Optional<T>(null);
+  public static empty<T>(): Optional<OptionalValue<T>> {
+    return new Optional<OptionalValue<T>>(null);
   }
 
   /**
@@ -27,15 +27,15 @@ class Optional<T> {
    * @param value
    */
   public static ofNullable<T>(
-    value: T | null | undefined
-  ): Optional<T | null | undefined> {
+    value: OptionalValue<T>
+  ): Optional<OptionalValue<T>> {
     return new Optional(value);
   }
 
   /**
    * 如果存在值，则返回值，否则抛出异常
    */
-  public get(): T {
+  public get(): OptionalValue<T> {
     if (this.isEmpty()) {
       throw new Error("No value present");
     }
@@ -71,7 +71,7 @@ class Optional<T> {
    * @param other
    */
   public orElse(other: T): T {
-    return this.isPresent() ? this.value! : other;
+    return this.isPresent() ? (this.value! as T) : other;
   }
 
   /**
@@ -93,5 +93,7 @@ class Optional<T> {
     return this.value!;
   }
 }
+
+export type OptionalValue<T> = T | null | undefined;
 
 export default Optional;

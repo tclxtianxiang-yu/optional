@@ -1,6 +1,6 @@
 {
   "name": "optional2js",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "为js提供的类似Java实现的Optional库",
   "main": "dist/index.cjs.js",
   "module": "dist/index.esm.js",
@@ -16,8 +16,7 @@
   "scripts": {
     "test": "jest",
     "eslint": "./node_modules/.bin/eslint --fix src/**/*.ts",
-    "build": "rollup --config rollup.config.js --bundleConfigAsCjs",
-    "publish": "npm run build && npm publish"
+    "build": "rollup --config rollup.config.js --bundleConfigAsCjs"
   },
   "keywords": [
     "optional",
