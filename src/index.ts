@@ -41,6 +41,17 @@ class Optional<T> {
   }
 
   /**
+   * 对Optional中的值应用映射函数，如果值存在。如果值不存在，返回一个空的Optional。
+   * @param mapper 映射函数，用于转换Optional中的值
+   * @returns 如果值存在，返回一个新的Optional，该Optional包含映射函数的结果。如果值不存在，返回一个空的Optional。
+   */
+  public map<R>(mapper: (value: T) => R): Optional<R> {
+    return this.isPresent()
+      ? Optional.ofNullable(mapper(this.value!))
+      : Optional.empty();
+  }
+
+  /**
    * 如果值不存在则返回true，否则返回false
    */
   public isEmpty(): boolean {

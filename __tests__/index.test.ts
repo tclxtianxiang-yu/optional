@@ -39,6 +39,18 @@ describe("Optional", () => {
     });
   });
 
+  describe("map", () => {
+    test("should return a new Optional with the result of the mapping function if the value is present", () => {
+      const mapper = (value: number) => value * 2;
+      expect(Optional.of(2).map(mapper).get()).toBe(4);
+    });
+
+    test("should return an empty Optional if the value is not present", () => {
+      const mapper = (value: number) => value * 2;
+      expect(Optional.empty<number>().map(mapper).isEmpty()).toBe(true);
+    });
+  });
+
   describe("isPresent", () => {
     test("should return true if the value is present", () => {
       expect(Optional.of(1).isPresent()).toBe(true);
