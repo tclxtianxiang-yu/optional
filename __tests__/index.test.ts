@@ -75,6 +75,24 @@ describe("Optional", () => {
     });
   });
 
+  describe("ifPresentOrElse", () => {
+    test("should call the first function with the value if it is present", () => {
+      const mockFn = jest.fn();
+      const mockFn2 = jest.fn();
+      Optional.of(1).ifPresentOrElse(mockFn, mockFn2);
+      expect(mockFn).toHaveBeenCalledWith(1);
+      expect(mockFn2).not.toHaveBeenCalled();
+    });
+
+    test("should call the second function if the value is not present", () => {
+      const mockFn = jest.fn();
+      const mockFn2 = jest.fn();
+      Optional.empty().ifPresentOrElse(mockFn, mockFn2);
+      expect(mockFn).not.toHaveBeenCalled();
+      expect(mockFn2).toHaveBeenCalled();
+    });
+  });
+
   describe("orElse", () => {
     test("should return the value if it is present", () => {
       expect(Optional.of(1).orElse(2)).toBe(1);

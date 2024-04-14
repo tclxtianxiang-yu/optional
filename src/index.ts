@@ -76,6 +76,22 @@ class Optional<T> {
   }
 
   /**
+   * 如果值存在，则使用该值调用consumer，否则调用emptyConsumer
+   * @param consumer
+   * @param emptyConsumer
+   */
+  public ifPresentOrElse(
+    consumer: (value: T) => void,
+    emptyConsumer: () => void
+  ): void {
+    if (this.isPresent()) {
+      consumer(this.value!);
+    } else {
+      emptyConsumer();
+    }
+  }
+
+  /**
    * 如果存在值，则返回该值，否则返回other
    * @param other
    */
