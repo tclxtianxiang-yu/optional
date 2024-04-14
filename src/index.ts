@@ -52,6 +52,18 @@ class Optional<T> {
   }
 
   /**
+   * 异步 对Optional中的值应用异步映射函数，如果值存在。如果值不存在，返回一个空的Optional。
+   * @param mapper
+   */
+  public async mapAsync<R>(
+    mapper: (value: T) => Promise<R>
+  ): Promise<Optional<R>> {
+    return this.isPresent()
+      ? Optional.ofNullable(await mapper(this.value!))
+      : Optional.empty();
+  }
+
+  /**
    * 如果值不存在则返回true，否则返回false
    */
   public isEmpty(): boolean {
@@ -76,6 +88,18 @@ class Optional<T> {
   }
 
   /**
+   * 异步 如果值存在，使用该值调用指定的consumer，否则不执行任何操作
+   * @param consumer
+   */
+  public async ifPresentAsync(
+    consumer: (value: T) => Promise<void>
+  ): Promise<void> {
+    if (this.isPresent()) {
+      await consumer(this.value!);
+    }
+  }
+
+  /**
    * 如果值存在，则使用该值调用consumer，否则调用emptyConsumer
    * @param consumer
    * @param emptyConsumer
@@ -88,6 +112,22 @@ class Optional<T> {
       consumer(this.value!);
     } else {
       emptyConsumer();
+    }
+  }
+
+  /**
+   * 异步 如果值存在，则使用该值调用consumer，否则调用emptyConsumer
+   * @param consumer
+   * @param emptyConsumer
+   */
+  public async ifPresentOrElseAsync(
+    consumer: (value: T) => Promise<void>,
+    emptyConsumer: () => Promise<void>
+  ): Promise<void> {
+    if (this.isPresent()) {
+      await consumer(this.value!);
+    } else {
+      await emptyConsumer();
     }
   }
 
@@ -105,6 +145,14 @@ class Optional<T> {
    */
   public orElseGet(supplier: () => T): T {
     return this.isPresent() ? this.value! : supplier();
+  }
+
+  /**
+   * 异步 如果存在值，则返回该值，否则使用异步supplier提供的值
+   * @param supplier
+   */
+  public async orElseGetAsync(supplier: () => Promise<T>): Promise<T> {
+    return this.isPresent() ? this.value! : await supplier();
   }
 
   /**

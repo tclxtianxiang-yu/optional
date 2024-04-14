@@ -51,6 +51,20 @@ describe("Optional", () => {
     });
   });
 
+  describe("mapAsync", () => {
+    test("should return a new Optional with the result of the mapping function if the value is present", async () => {
+      const mapper = async (value: number) => value * 2;
+      expect((await Optional.of(2).mapAsync(mapper)).get()).toBe(4);
+    });
+
+    test("should return an empty Optional if the value is not present", async () => {
+      const mapper = async (value: number) => value * 2;
+      expect((await Optional.empty<number>().mapAsync(mapper)).isEmpty()).toBe(
+        true
+      );
+    });
+  });
+
   describe("isPresent", () => {
     test("should return true if the value is present", () => {
       expect(Optional.of(1).isPresent()).toBe(true);
@@ -75,6 +89,20 @@ describe("Optional", () => {
     });
   });
 
+  describe("ifPresentAsync", () => {
+    test("should call the given function with the value if it is present", async () => {
+      const mockFn = jest.fn();
+      await Optional.of(1).ifPresentAsync(mockFn);
+      expect(mockFn).toHaveBeenCalledWith(1);
+    });
+
+    test("should not call the given function if the value is not present", async () => {
+      const mockFn = jest.fn();
+      await Optional.empty().ifPresentAsync(mockFn);
+      expect(mockFn).not.toHaveBeenCalled();
+    });
+  });
+
   describe("ifPresentOrElse", () => {
     test("should call the first function with the value if it is present", () => {
       const mockFn = jest.fn();
@@ -88,6 +116,24 @@ describe("Optional", () => {
       const mockFn = jest.fn();
       const mockFn2 = jest.fn();
       Optional.empty().ifPresentOrElse(mockFn, mockFn2);
+      expect(mockFn).not.toHaveBeenCalled();
+      expect(mockFn2).toHaveBeenCalled();
+    });
+  });
+
+  describe("ifPresentOrElseAsync", () => {
+    test("should call the first function with the value if it is present", async () => {
+      const mockFn = jest.fn();
+      const mockFn2 = jest.fn();
+      await Optional.of(1).ifPresentOrElseAsync(mockFn, mockFn2);
+      expect(mockFn).toHaveBeenCalledWith(1);
+      expect(mockFn2).not.toHaveBeenCalled();
+    });
+
+    test("should call the second function if the value is not present", async () => {
+      const mockFn = jest.fn();
+      const mockFn2 = jest.fn();
+      await Optional.empty().ifPresentOrElseAsync(mockFn, mockFn2);
       expect(mockFn).not.toHaveBeenCalled();
       expect(mockFn2).toHaveBeenCalled();
     });
@@ -110,6 +156,20 @@ describe("Optional", () => {
 
     test("should return the value from the given function if the value is not present", () => {
       expect(Optional.empty().orElseGet(() => 2)).toBe(2);
+    });
+  });
+
+  describe("orElseGetAsync", () => {
+    test("should return the value if it is present", async () => {
+      expect(
+        await Optional.of(1).orElseGetAsync(() => Promise.resolve(2))
+      ).toBe(1);
+    });
+
+    test("should return the value from the given function if the value is not present", async () => {
+      expect(
+        await Optional.empty().orElseGetAsync(() => Promise.resolve(2))
+      ).toBe(2);
     });
   });
 
